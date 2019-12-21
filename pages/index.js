@@ -1,86 +1,118 @@
-import React from 'react'
-import Head from 'next/head'
-import Nav from '../components/nav'
+import React, { Component } from 'react';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import Nav from '../components/nav';
+import sketch from '../sketches/sketch';
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+// needed to deal with server side rending 
+const P5Wrapper = dynamic(import('react-p5-wrapper'), {
+  ssr: false,  // guess we turn it off to avoid reference error for window, 
+               // since node doesn't have that context
+  loading: () => (
+    <div className="sketch-holder">Loading...</div>
+  ),
+});
 
-    <Nav />
+class Home extends Component {
+  constructor(){
+    super();
+    this.state = {color:[Math.random()*255, Math.random()*255, Math.random()*255]};
+    this.randomColor = this.randomColor.bind(this);
+  }
 
-    <div className="hero">
-      <h1 className="title">Dance!</h1>
-      <p className="description">
-        Play around with the <code>code</code> to explore.
-      </p>
+  randomColor(){
+    this.setState({color:[Math.random()*255, Math.random()*255, Math.random()*255]});
+  }
 
-      <div className="row">
-        <a href="https://medium.com/@tesla809" className="card">
-          <h3>Blog</h3>
-          <p>Blah Blah Stuff</p>
-        </a>
-        <a href="/" className="card">
-          <h3>Code</h3>
-          <p>Explore Computational Magic</p>
-        </a>
-        <a href="/"
-          className="card">
-          <h3>Random</h3>
-          <p>Are you feeling lucky?</p>
-        </a>
+  render() {
+    return (
+      <div>
+        <Head>
+          <title>Home</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+    
+        <Nav />
+        
+        <div>
+          <button onClick={this.randomColor}>Random Color</button>
+          <P5Wrapper sketch={sketch} color={this.state.color}></P5Wrapper>
+        </div>
+    
+        <div className="hero">
+          <h1 className="title">Dance!</h1>
+          <p className="description">
+            Play around with the <code>code</code> to explore.
+          </p>
+    
+          <div className="row">
+            <a href="https://medium.com/@tesla809" className="card">
+              <h3>Blog</h3>
+              <p>Blah Blah Stuff</p>
+            </a>
+            <a href="/" className="card">
+              <h3>Code</h3>
+              <p>Explore Computational Magic</p>
+            </a>
+            <a href="/"
+              className="card">
+              <h3>Sketches</h3>
+              <p>Graphics using p5.js, matter.js, etc.</p>
+            </a>
+          </div>
+        </div>
+    
+        <style jsx>{`
+          .hero {
+            width: 100%;
+            color: #333;
+          }
+          .title {
+            margin: 0;
+            width: 100%;
+            padding-top: 80px;
+            line-height: 1.15;
+            font-size: 48px;
+          }
+          .title,
+          .description {
+            text-align: center;
+          }
+          .row {
+            max-width: 880px;
+            margin: 80px auto 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+          }
+          .card {
+            padding: 18px 18px 24px;
+            width: 220px;
+            text-align: left;
+            text-decoration: none;
+            color: #434343;
+            border: 1px solid #9b9b9b;
+          }
+          .card:hover {
+            border-color: #067df7;
+          }
+          .card h3 {
+            margin: 0;
+            color: #067df7;
+            font-size: 18px;
+          }
+          .card p {
+            margin: 0;
+            padding: 12px 0 0;
+            font-size: 13px;
+            color: #333;
+          }
+        `}</style>
       </div>
-    </div>
+    );
+  }
+}
 
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
-      }
-    `}</style>
-  </div>
-)
+
 
 export default Home
