@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Nav from '../components/nav';
 import Graphics from '../components/graphics';
