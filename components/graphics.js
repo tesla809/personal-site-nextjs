@@ -14,17 +14,26 @@ const P5Wrapper = dynamic(import('react-p5-wrapper'), {
 class Graphics extends Component {
   constructor(){
     super();
-    this.state = {color:[Math.random()*255, Math.random()*255, Math.random()*255]};
+    this.state = {color:[this.randomChoose(), this.randomChoose(), this.randomChoose()]};
     this.randomColor = this.randomColor.bind(this);
+    this.randomChoose = this.randomChoose.bind(this);
+  }
+
+  randomChoose() {
+    return Math.random() * 255;
   }
 
   randomColor(){
-    this.setState({color:[Math.random()*255, Math.random()*255, Math.random()*255]});
+    this.setState({color: [
+      this.randomChoose(), 
+      this.randomChoose(), 
+      this.randomChoose()
+    ]});
   }
 
   render() {
     return (
-      <div>
+      <div style={this.props.style}>
         <button onClick={this.randomColor}>Random Color</button>
         <P5Wrapper sketch={sketch} color={this.state.color}></P5Wrapper>
       </div>

@@ -5,7 +5,7 @@ import Nav from '../components/nav';
 class Home extends Component {
   render() {
     return (
-      <div>
+      <div style={this.props.style}>
         <Head>
           <title>Home</title>
           <link rel="icon" href="/favicon.ico" />
@@ -37,13 +37,6 @@ class Home extends Component {
         </div>
     
         <style jsx>{`
-          Graphics {
-            flex: 1,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'column'
-          }
-
           .hero {
             width: 100%;
             color: #333;
