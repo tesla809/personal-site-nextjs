@@ -1,36 +1,27 @@
-import React from 'react'
-import Document, {Head, Main, NextScript} from 'next/document'
-import {renderStaticOptimized} from 'glamor/server'
-
+import Document from "next/document";
+import { ServerStyleSheet } from "styled-components";
 export default class MyDocument extends Document {
-  static async getInitialProps({renderPage}) {
-    const page = renderPage()
-    const styles = renderStaticOptimized(() => page.html)
-    return {...page, ...styles}
-  }
+  static async getInitialProps(ctx) {
+    const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
+        });
+      const initialProps = await Document.getInitialProps(ctx);
 
-  constructor(props) {
-    super(props)
-    const {__NEXT_DATA__, ids} = this.props
-    if (typeof window !== 'undefined') {
-      rehydrate(ids)
-    } else {
-      __NEXT_DATA__.ids = ids
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        )
+      };
+    } finally {
+      sheet.seal();
     }
-  }
-
-  render() {
-    return (
-      <html>
-        <Head>
-          <title>With Glamorous</title>
-          <style dangerouslySetInnerHTML={{__html: this.props.css}} />
-        </Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </html>
-    )
   }
 }
