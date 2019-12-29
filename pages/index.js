@@ -1,37 +1,40 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Home from '../components/Home';
-import Graphics from '../components/Graphics';
-
+import P5Component from '../components/P5Wrapper';
+// import sketch from '../sketches/sketch';
+// import sketch2 from '../sketches/sketch-2';
+// import sketch3 from '../sketches/sketch-3';
+import sketch4 from '../sketches/sketch-4';
 
 class Index extends Component {
   render() {
     const Wrapper = styled.div`
-      position: relative;
+      display: flex;
+      justify-content: center;
     `;
 
     const homeStyle = {
-      backgroundColor: "orange",
+      backgroundColor: "offwhite",
+      padding: "0.5rem",
+      width: "100%",
       position: "absolute",
       margin: "auto",
       width: "100%",
       zIndex: 9,
-      opacity: 0.6,
+      opacity: 0.8,
     };
 
     const graphicsStyle = {
-      backgroundColor: "beige",
-      position: "absolute",
-      margin: "auto",
-      left: "25%",
-      width: "50%",
+      width: "100%",
+      zIndex: -1,
     };
 
     return (
       <div>
         <Wrapper>
-          <Graphics style={graphicsStyle} />
-          <Home style={homeStyle} />
+          <Home style={homeStyle}></Home>
+          <P5Component style={graphicsStyle} sketch={sketch4} />
         </Wrapper>
       </div>
     );
