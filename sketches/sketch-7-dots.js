@@ -16,16 +16,19 @@ export default (p) => {
     h: 0,
     w: 0
   }
-  
-  let triShape = {
-    x: 0,
-    y: 0,
-    size: 0,
-  }
+
+  let extraCanvas;
 
   p.setup = () => {
-    p.createCanvas(400, 400);
+    // set to browser window's dimensions
+    p.createCanvas(window.outerWidth, window.outerHeight);
     p.background(255);
+
+    // extra layer on top of canvas
+    // off screen canvas is a Graphics Object.
+    // so called createGraphics();
+    extraCanvas = p.createGraphics(p.width, p.height);
+    extraCanvas.clear();
   }
 
   p.draw = () => {
@@ -43,21 +46,21 @@ export default (p) => {
     // assing random spot
     spot.x = p.random(0, p.width);
     spot.y = p.random(0, p.height);
-    
-    // triangle shape
-    triShape.x = p.random(0, p.width);
-    triShape.y = p.random(0, p.height);
-    triShape.size = p.random(24, 50);
-    
+  
     // create dots
     p.noStroke();
     p.fill(col.r, col.g, col.b, col.a);
     p.ellipse(spot.x, spot.y, dotSize.h, dotSize.w);
     
-    p.triangle(triShape.x, triShape.y, 
-            triShape.x + triShape.size, 
-            triShape.y + triShape.size, 
-            triShape.x + triShape.size + 20, 
-            triShape.y + triShape.size - 20);
+    if (p.mouseIsPressed) {
+      p.fill(255);
+      // add noStroke to ellipse on extraCanvas
+      // if removed has outlined shown
+      extraCanvas.noStroke();
+      // if extraCanvas.ellipse(...)
+      // then wil draw on canvas and 
+      // dots won't repopulate
+      p.ellipse(p.mouseX, p.mouseY, 100, 100)
+    }
   } 
 }
